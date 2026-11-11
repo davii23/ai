@@ -24,3 +24,31 @@ print(code)
 
 # Requirements to install:
 # pip install transformers torch
+#-------------------------------------
+
+from transformers import pipeline
+
+# Load GPT-2 model
+generator = pipeline("text-generation", model="gpt2")
+
+# Incomplete code
+code = "def add(a, b):"
+
+# Generate code completion
+result = generator(
+    code,
+    max_new_tokens=40,
+    do_sample=False,
+    pad_token_id=50256
+)
+
+print("Original Code:")
+print(code)
+
+print("\nCompleted Code:")
+print(result[0]['generated_text'])
+
+
+# Requirements to install:
+# pip install transformers torch
+
