@@ -1,0 +1,90 @@
+# ============================================================
+# EXPERIMENT 1(b) - AI CODE GENERATION USING OLLAMA
+# ============================================================
+
+import ollama
+
+model_name = "qwen2.5-coder:1.5b"
+
+response = ollama.generate(
+    model=model_name,
+    prompt="Generate only Python code for a function named square that returns the square of a number. No explanation or markdown."
+)
+
+code = response["response"]
+code = code.replace("```python", "").replace("```", "").strip()
+
+print("Generated Code:")
+print(code)
+
+local = {}
+exec(code, local)
+
+print("Expected: 25")
+print("Actual:", local["square"](5))
+
+
+# ------------------------------------------------------------
+# EXPERIMENT 2 - SIMPLIFIED GAN-STYLE CODE GENERATION
+# ------------------------------------------------------------
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+
+real = [
+    "def add(a,b): return a+b",
+    "def square(n): return n*n"
+]
+
+response = ollama.generate(
+    model="codellama",
+    prompt="Generate a Python sorting function. Return only Python code."
+)
+
+fake = response["response"]
+
+data = real + [fake]
+labels = [1, 1, 0]
+
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(data)
+
+model = LogisticRegression()
+model.fit(X, labels)
+
+result = model.predict(X)
+
+print("\nEXPERIMENT 2")
+print("Real code prediction:", result[0])
+print("Real code prediction:", result[1])
+print("Generated code prediction:", result[2])
+
+
+# ------------------------------------------------------------
+# EXPERIMENT 6 - STATIC ANALYSIS USING PYLINT AND MYPY
+# ------------------------------------------------------------
+
+import ast
+
+def add(a: int, b: int) -> int:
+    """Return the sum of two numbers."""
+    return a + b
+
+print("\nEXPERIMENT 6")
+
+sample_code = """
+def add(a: int, b: int) -> int:
+    return a + b
+"""
+
+try:
+    ast.parse(sample_code)
+    print("Syntax is correct")
+except SyntaxError:
+    print("Syntax error")
+
+print("Addition output:", add(5, 3))
+
+# Run separately in CMD:
+# pylint experiments.py
+# mypy experiments.py
