@@ -24,7 +24,9 @@ print(code)
 
 # Requirements to install:
 # pip install transformers torch
-#-------------------------------------
+#--------------------------------------------------------
+#--------------------------------------------------------
+
 
 from transformers import pipeline
 
